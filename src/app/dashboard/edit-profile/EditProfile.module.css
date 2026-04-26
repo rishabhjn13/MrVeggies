@@ -1,0 +1,206 @@
+/* ─── Page Shell ─────────────────────────────────────────── */
+.page {
+    min-height: 100vh;
+    background: var(--c-bg);
+    padding: 80px 20px 120px;
+    position: relative;
+    overflow: hidden;
+}
+
+.page::before,
+.page::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.page::before {
+    width: 800px;
+    height: 800px;
+    background: var(--c-brand);
+    top: -300px;
+    left: -200px;
+}
+
+.page::after {
+    width: 500px;
+    height: 500px;
+    background: var(--c-accent);
+    bottom: -150px;
+    right: -180px;
+}
+
+/* Container */
+.container {
+    max-width: 620px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 52px;
+}
+
+.header h1 {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--c-text);
+    margin: 0 0 12px;
+    letter-spacing: -1.8px;
+}
+
+.header p {
+    font-size: 16.5px;
+    color: var(--c-muted);
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+/* Avatar */
+.avatarSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+    gap: 16px;
+}
+
+.avatar {
+    width: 110px;
+    height: 110px;
+    background: var(--c-brand-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    border: 6px solid var(--c-surface);
+    box-shadow: var(--shadow-card);
+    &>img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+}
+
+.changePhotoBtn {
+    background: transparent;
+    border: 1.5px solid var(--c-brand);
+    color: var(--c-brand);
+    padding: 8px 20px;
+    border-radius: var(--radius-pill);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.changePhotoBtn:hover {
+    background: var(--c-brand);
+    color: white;
+}
+
+/* Form */
+.form {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    padding: 48px 42px;
+    box-shadow: var(--shadow-card);
+}
+
+/* Form Groups */
+.formGroup {
+    margin-bottom: 28px;
+}
+
+.formGroup label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    margin-bottom: 9px;
+}
+
+.formGroup input {
+    width: 100%;
+    padding: 14px 18px;
+    background: var(--c-bg);
+    border: 1.5px solid var(--c-border);
+    border-radius: var(--radius-md);
+    font-size: 16.5px;
+    color: var(--c-text);
+    transition: all 0.25s ease;
+}
+
+.formGroup input:focus {
+    outline: none;
+    border-color: var(--c-brand);
+    box-shadow: 0 0 0 3px rgba(0, 168, 119, 0.08);
+}
+
+/* Success Message */
+.successMessage {
+    background: var(--c-success-light);
+    color: var(--c-brand);
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    font-size: 14.5px;
+    font-weight: 500;
+    margin: 20px 0;
+    text-align: center;
+    border-left: 4px solid var(--c-brand);
+}
+
+/* Save Button */
+.saveBtn {
+    margin-top: 32px;
+    width: 100%;
+    padding: 16px;
+    background: var(--c-brand);
+    color: white;
+    border: none;
+    border-radius: var(--radius-pill);
+    font-size: 16.5px;
+    font-weight: 700;
+    font-family: var(--font-display);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: var(--shadow-btn);
+}
+
+.saveBtn:hover:not(:disabled) {
+    background: var(--c-brand-dark);
+    transform: translateY(-2px);
+}
+
+.saveBtn:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .page {
+        padding: 60px 16px 80px;
+    }
+
+    .header h1 {
+        font-size: 34px;
+    }
+
+    .form {
+        padding: 32px 24px;
+    }
+}

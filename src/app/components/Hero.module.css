@@ -1,0 +1,325 @@
+/* Hero.module.css */
+
+.hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    padding: 80px 5vw 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ── Left ── */
+.left {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--c-accent-light);
+    color: var(--c-accent-text);
+    border-radius: var(--radius-pill);
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    width: fit-content;
+}
+
+.badgeDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    flex-shrink: 0;
+    animation: pulseDot 1.8s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(0.75);
+    }
+}
+
+.heading {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 4.5vw, 56px);
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: -1.5px;
+    color: var(--c-text);
+    margin-bottom: 20px;
+}
+
+.headingEm {
+    font-style: normal;
+    color: var(--c-brand);
+}
+
+.subheading {
+    font-size: 17px;
+    color: var(--c-muted);
+    line-height: 1.65;
+    max-width: 420px;
+    margin-bottom: 36px;
+}
+
+/* ── Search ── */
+.searchBar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--c-surface);
+    border: 1.5px solid var(--c-border);
+    border-radius: var(--radius-pill);
+    padding: 6px 6px 6px 16px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 32px;
+    max-width: 460px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.searchBar:focus-within {
+    border-color: var(--c-brand);
+    box-shadow: 0 0 0 3px rgba(0, 168, 119, 0.12);
+}
+
+.searchIcon {
+    font-size: 15px;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.searchInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 15px;
+    background: transparent;
+    color: var(--c-text);
+    min-width: 0;
+}
+
+.searchInput::placeholder {
+    color: var(--c-placeholder);
+}
+
+.searchBtn {
+    background: var(--c-brand);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--font-body);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.searchBtn:hover {
+    background: var(--c-brand-dark);
+}
+
+/* ── Stats ── */
+.stats {
+    display: flex;
+    gap: 32px;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.statNum {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.5px;
+}
+
+.statLabel {
+    font-size: 12px;
+    color: var(--c-muted);
+}
+
+/* ── Right visual ── */
+.right {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 420px;
+}
+
+/* ── Delivery card ── */
+.deliveryCard {
+    background: var(--c-surface);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--c-border);
+    width: 290px;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.cardIcon {
+    width: 44px;
+    height: 44px;
+    background: var(--c-brand-light);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.cardTitle {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--c-text);
+}
+
+.cardSub {
+    font-size: 12px;
+    color: var(--c-muted);
+    margin-top: 2px;
+}
+
+.progressBar {
+    height: 6px;
+    background: #eeeee8;
+    border-radius: 3px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    width: 72%;
+    background: var(--c-brand);
+    border-radius: 3px;
+    animation: progressPulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes progressPulse {
+    from {
+        width: 60%;
+    }
+
+    to {
+        width: 88%;
+    }
+}
+
+.itemList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.itemEmoji {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.itemName {
+    font-size: 13px;
+    font-weight: 500;
+    flex: 1;
+    color: var(--c-text);
+}
+
+.itemPrice {
+    font-size: 13px;
+    color: var(--c-brand);
+    font-weight: 600;
+}
+
+/* ── Floating badges ── */
+.floatBadge {
+    position: absolute;
+    background: var(--c-surface);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    box-shadow: var(--shadow-float);
+    border: 1px solid var(--c-border);
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    color: var(--c-text);
+}
+
+.badgeTop {
+    top: 36px;
+    right: 4px;
+}
+
+.badgeBottom {
+    bottom: 48px;
+    left: -4px;
+}
+
+.floatDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--c-brand);
+    flex-shrink: 0;
+}
+
+.floatDotOrange {
+    background: var(--c-accent);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 48px 5vw 40px;
+    }
+
+    .right {
+        display: none;
+    }
+
+    .stats {
+        gap: 20px;
+    }
+}

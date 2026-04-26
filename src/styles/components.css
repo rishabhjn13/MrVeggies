@@ -1,0 +1,159 @@
+/* ─────────────────────────────────────────────
+   components.css  —  Shared reusable component styles
+   ───────────────────────────────────────────── */
+
+/* ── Section shared ── */
+.section-tag {
+    display: inline-block;
+    background: var(--c-brand-light);
+    color: var(--c-brand-dark);
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: var(--radius-pill);
+    padding: 5px 14px;
+    margin-bottom: 12px;
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3.5vw, 40px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--c-text);
+    margin-bottom: 8px;
+}
+
+.section-sub {
+    font-size: 16px;
+    color: var(--c-muted);
+    margin-bottom: 40px;
+    max-width: 480px;
+    line-height: 1.65;
+}
+
+/* ── Primary Button ── */
+.btn-primary {
+    background: var(--c-brand);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 11px 26px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    box-shadow: var(--shadow-btn);
+}
+
+.btn-primary:hover {
+    background: var(--c-brand-dark);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* ── Add to cart button ── */
+.add-btn {
+    background: var(--c-brand);
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    flex-shrink: 0;
+}
+
+.add-btn:hover {
+    background: var(--c-brand-dark);
+    transform: scale(1.1);
+}
+
+/* ── Card base ── */
+.card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+}
+
+/* ── Badge ── */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--c-accent-light);
+    color: var(--c-accent-text);
+    border-radius: var(--radius-pill);
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* ── App store buttons ── */
+.app-store-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--c-text);
+    color: #fff;
+    border-radius: var(--radius-md);
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+    border: none;
+    font-family: var(--font-body);
+}
+
+.app-store-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.app-store-btn .store-icon {
+    font-size: 22px;
+}
+
+.app-store-btn .store-label {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.app-store-btn .store-sub {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1;
+}
+
+.app-store-btn .store-name {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+/* ── Responsive helper ── */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 26px;
+    }
+
+    .section-sub {
+        font-size: 14px;
+        margin-bottom: 28px;
+    }
+}

@@ -1,0 +1,140 @@
+    /* AppBanner.module.css */
+
+    .section {
+        padding: 0 0 64px;
+    }
+
+    .inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 5vw;
+    }
+
+    .banner {
+        background: var(--c-surface);
+        border: 1px solid var(--c-border);
+        border-radius: 28px;
+        padding: 56px 5%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 48px;
+        flex-wrap: wrap;
+    }
+
+    /* ── Text ── */
+    .textBlock {
+        flex: 1;
+        min-width: 260px;
+    }
+
+    .storeBtns {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .storeBtn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--c-text);
+        color: #fff;
+        border-radius: var(--radius-md);
+        padding: 12px 20px;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s, opacity 0.2s;
+        font-family: var(--font-body);
+    }
+
+    .storeBtn:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+    }
+
+    .storeBtn:focus-visible {
+        outline: 2px solid var(--c-brand);
+        outline-offset: 2px;
+    }
+
+    .storeIcon {
+        font-size: 22px;
+        line-height: 1;
+    }
+
+    .storeLabel {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        text-align: left;
+    }
+
+    .storeSub {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1;
+    }
+
+    .storeName {
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.2;
+    }
+
+    /* ── Ratings ── */
+    .ratingsBlock {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .ratingBox {
+        background: var(--c-brand-light);
+        border-radius: var(--radius-md);
+        padding: 16px 20px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        min-width: 90px;
+    }
+
+    .ratingNum {
+        font-family: var(--font-display);
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--c-brand-dark);
+        line-height: 1;
+    }
+
+    .ratingStars {
+        font-size: 13px;
+        color: var(--c-accent);
+        letter-spacing: 1px;
+    }
+
+    .ratingDots {
+        font-size: 10px;
+        color: var(--c-brand);
+        letter-spacing: 2px;
+    }
+
+    .ratingLabel {
+        font-size: 11px;
+        color: var(--c-muted);
+    }
+
+    @media (max-width: 640px) {
+        .banner {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 32px;
+        }
+
+        .ratingsBlock {
+            width: 100%;
+            justify-content: flex-start;
+        }
+    }

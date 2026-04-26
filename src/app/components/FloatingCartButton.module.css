@@ -1,0 +1,76 @@
+.floatingCartBtn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 64px;
+    height: 64px;
+    background: var(--c-brand);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(0, 168, 119, 0.35);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 998;
+}
+
+.floatingCartBtn:hover {
+    transform: scale(1.08) translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 168, 119, 0.45);
+}
+
+.floatingCartBtn:active {
+    transform: scale(0.95);
+}
+
+.iconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.floatingCartBtn:hover .iconWrapper {
+    transform: scale(1.15);
+}
+
+/* Badge */
+.badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--c-accent);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--c-surface);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 0 6px;
+    line-height: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .floatingCartBtn {
+        bottom: 20px;
+        right: 20px;
+        width: 58px;
+        height: 58px;
+    }
+
+    .badge {
+        min-width: 22px;
+        height: 22px;
+        font-size: 12px;
+        border-width: 2.5px;
+    }
+}

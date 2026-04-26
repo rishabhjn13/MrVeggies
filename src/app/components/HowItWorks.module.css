@@ -1,0 +1,111 @@
+/* HowItWorks.module.css */
+
+.section {
+  padding: 0 5vw 64px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.wrapper {
+  background: var(--c-brand);
+  border-radius: 28px;
+  padding: 56px 5%;
+}
+
+.header {
+  margin-bottom: 40px;
+}
+
+.sectionTag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+  padding: 5px 14px;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.sub {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 440px;
+  line-height: 1.65;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 20px;
+}
+
+.step {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 28px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s;
+}
+.step:hover {
+  background: rgba(255, 255, 255, 0.17);
+}
+
+.stepNum {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.15);
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.stepEmoji {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.stepTitle {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.stepDesc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .wrapper {
+    padding: 36px 5%;
+  }
+}
+
+@media (max-width: 400px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

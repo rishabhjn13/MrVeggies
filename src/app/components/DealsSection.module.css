@@ -1,0 +1,142 @@
+/* DealsSection.module.css */
+
+.section {
+    padding: 64px 0;
+}
+
+.inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 5vw;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+/* ── Card ── */
+.card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+}
+
+/* ── Image area ── */
+.imgArea {
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.discountBadge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--c-accent);
+    color: #fff;
+    border-radius: var(--radius-pill);
+    padding: 3px 9px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.productEmoji {
+    font-size: 52px;
+    line-height: 1;
+}
+
+/* ── Body ── */
+.body {
+    padding: 14px;
+}
+
+.productName {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--c-text);
+    margin-bottom: 4px;
+}
+
+.weight {
+    font-size: 12px;
+    color: var(--c-muted);
+    margin-bottom: 12px;
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.priceBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.priceNow {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--c-text);
+}
+
+.priceWas {
+    font-size: 11px;
+    color: var(--c-muted);
+    text-decoration: line-through;
+}
+
+/* ── Add button ── */
+.addBtn {
+    background: var(--c-brand);
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    font-size: 20px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    flex-shrink: 0;
+    font-family: var(--font-body);
+}
+
+.addBtn:hover {
+    background: var(--c-brand-dark);
+    transform: scale(1.1);
+}
+
+.addBtn:focus-visible {
+    outline: 2px solid var(--c-brand);
+    outline-offset: 2px;
+}
+
+.cartCount {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+@media (max-width: 480px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

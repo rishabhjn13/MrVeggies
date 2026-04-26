@@ -1,0 +1,239 @@
+.page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 5vw;
+    background: var(--c-bg);
+    min-height: 100vh;
+}
+
+.searchHeader {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.searchContainer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: var(--c-surface);
+    border: 1.5px solid var(--c-border);
+    border-radius: var(--radius-pill);
+    padding: 12px 20px;
+    box-shadow: var(--shadow-card);
+    min-width: 300px;
+}
+
+.searchIcon {
+    font-size: 18px;
+    margin-right: 12px;
+    color: var(--c-muted);
+}
+
+.searchInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    font-family: var(--font-body);
+}
+
+.sortSelect {
+    padding: 10px 16px;
+    border: 1.5px solid var(--c-border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    background: var(--c-surface);
+}
+
+.mainContent {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 48px;
+}
+
+.sidebar {
+    background: var(--c-surface);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    height: fit-content;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--c-border);
+    position: sticky;
+    top: 24px;
+}
+
+.sidebarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.sidebar h2 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.clearBtn {
+    background: none;
+    border: none;
+    color: var(--c-brand);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.filterSection {
+    margin-bottom: 32px;
+}
+
+.filterSection h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--c-text);
+}
+
+.checkboxGroup,
+.ratingOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.priceInputs {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.priceInput {
+    width: 90px;
+    padding: 8px 12px;
+    border: 1.5px solid var(--c-border);
+    border-radius: var(--radius-md);
+}
+
+.resultsHeader {
+    margin-bottom: 20px;
+    font-size: 15px;
+    color: var(--c-muted);
+}
+
+.productGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+.noResults {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--c-muted);
+}
+
+/* Search Bar with Button */
+.searchContainer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: var(--c-surface);
+    border: 1.5px solid var(--c-border);
+    border-radius: var(--radius-pill);
+    padding: 8px 12px 8px 20px;
+    box-shadow: var(--shadow-card);
+    min-width: 300px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.searchContainer:focus-within {
+    border-color: var(--c-brand);
+    box-shadow: var(--shadow-input);
+}
+
+.searchIcon {
+    font-size: 18px;
+    margin-right: 12px;
+    color: var(--c-muted);
+    flex-shrink: 0;
+}
+
+.searchInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    font-family: var(--font-body);
+    color: var(--c-text);
+    padding-right: 12px;
+}
+
+.searchBtn {
+    background: var(--c-brand);
+    color: white;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 10px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+    box-shadow: var(--shadow-btn);
+    flex-shrink: 0;
+}
+
+.searchBtn:hover {
+    background: var(--c-brand-dark);
+}
+
+.searchBtn:active {
+    transform: scale(0.98);
+}
+
+/* Sort Container */
+.sortContainer {
+    flex-shrink: 0;
+}
+
+.sortSelect {
+    padding: 12px 16px;
+    border: 1.5px solid var(--c-border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    background: var(--c-surface);
+    color: var(--c-text);
+    cursor: pointer;
+    min-width: 180px;
+}
+
+.sortSelect:focus {
+    outline: none;
+    border-color: var(--c-brand);
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .mainContent {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: static;
+    }
+}

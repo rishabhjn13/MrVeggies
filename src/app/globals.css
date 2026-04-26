@@ -1,0 +1,103 @@
+ @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700;800&family=DM+Sans:wght@400;500&display=swap");
+ @tailwind base;
+ @tailwind components;
+ @tailwind utilities;
+
+ :root {
+   /* Brand */
+   --c-brand: #00a877;
+   --c-brand-dark: #007a57;
+   --c-brand-light: #e6f7f2;
+
+   /* Accent */
+   --c-accent: #ff6b35;
+   --c-accent-light: #fff3ee;
+   --c-accent-text: #cc4a1a;
+
+   /* Neutrals */
+   --c-bg: #fafaf7;
+   --c-surface: #ffffff;
+   --c-text: #1a1a18;
+   --c-muted: #6b6b66;
+   --c-subtle: #9b9b96;
+   --c-placeholder: #b0b0a8;
+   --c-border: rgba(0, 0, 0, 0.08);
+   --c-border-focus: #00a877;
+
+   /* Semantic */
+   --c-error: #d93025;
+   --c-error-light: #fef0ef;
+   --c-success: #00a877;
+   --c-success-light: #e6f7f2;
+   --c-warning: #e8820c;
+   --c-warning-light: #FFF3E0;
+
+   /* Typography */
+   --font-display: "Bricolage Grotesque", sans-serif;
+   --font-body: "DM Sans", sans-serif;
+
+   /* Radii */
+   --radius-xs: 8px;
+   --radius-sm: 10px;
+   --radius-md: 16px;
+   --radius-lg: 24px;
+   --radius-pill: 999px;
+
+   /* Shadows */
+   --shadow-card: 0 2px 24px rgba(0, 0, 0, 0.07);
+   --shadow-btn: 0 4px 20px rgba(0, 168, 119, 0.32);
+   --shadow-input-focus: 0 0 0 3px rgba(0, 168, 119, 0.12);
+   --shadow-float: 0 4px 20px rgba(0, 0, 0, 0.10);
+
+ }
+
+ /* ── Reset ── */
+ *,
+ *::before,
+ *::after {
+   box-sizing: border-box;
+   margin: 0;
+   padding: 0;
+ }
+
+ html {
+   scroll-behavior: smooth;
+ }
+
+ body {
+   font-family: var(--font-body);
+   background: var(--c-bg);
+   color: var(--c-text);
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   line-height: 1.5;
+   min-height: 100vh;
+ }
+
+ a {
+   text-decoration: none;
+   color: inherit;
+ }
+
+ button {
+   cursor: pointer;
+   font-family: var(--font-body);
+   border: none;
+   background: none;
+ }
+
+ input,
+ textarea {
+   font-family: var(--font-body);
+ }
+
+ img,
+ svg {
+   display: block;
+   max-width: 100%;
+ }
+
+ ul,
+ ol {
+   list-style: none;
+ }
