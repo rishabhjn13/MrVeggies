@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from "react";
+import React from "react";
 
 import "../styles/animations.css";
 import "../styles/components.css";

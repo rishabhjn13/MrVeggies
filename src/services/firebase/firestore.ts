@@ -68,10 +68,6 @@ export const read_n = async (n: number) => {
   return querySnapshot.docs.map((doc) => doc.data());
 };
 
-/** * READ QUERY (Search by Title)
- * Note: Firestore "search" is case-sensitive and prefix-based.
- * For advanced fuzzy search, consider using Algolia or ElasticSearch.
- */
 export const read_query = async (productTitle: string) => {
   const q = query(
     productsRef,
