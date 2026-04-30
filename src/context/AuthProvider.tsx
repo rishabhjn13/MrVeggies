@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, ReactNode } from "react";
-import { User } from "firebase/auth";
+import { User } from "@/store/useAuthStore";
 import { initializeAuth, useAuthStore } from "@/store/useAuthStore";
 import LoadingSpinner from "@/app/components/LoadingSpinner";
 
