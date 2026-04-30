@@ -2,19 +2,14 @@ export interface ProductSchema {
   id: string;
   product_id: string;
   product_name: string;
+  mrp: string;
+  price : string;
   category: string;
-  discounted_price: number;
-  actual_price: number;
-  rating: number;
-  rating_count: number;
-  about_product: string;
-  user_id: string[];
-  user_name: string[];
-  review_id: string[];
-  review_title: string[];
-  review_content: string[];
-  img_link: string;
-  product_link: string;
+  brand: string;
+  margin_percentage: string;
+  max_stock_level: string;
+  min_stock_level: string;
+  shelf_life_days: string
 }
 interface CartItem {
   id: string;

@@ -8,6 +8,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import Image from "next/image";
 import CartSidebar from "./CartSidebar";
 import { useCart } from "@/context/CartContext";
+import { useCartStore } from "@/store/useCartStore";
 
 const NAV_LINKS = [
     { label: "Explore", href: "#categories" },
@@ -108,16 +109,15 @@ const Navbar: React.FC = () => {
     };
 
     useEffect(() => {
-        updateAddress(); 
+        updateAddress();
     }, []);
+
+    const { items } = useCartStore();
 
     const {
         isCartOpen,
         openCart,
         closeCart,
-        cartItems,
-        updateQuantity,
-        removeFromCart
     } = useCart();
 
     useEffect(() => {
@@ -131,9 +131,6 @@ const Navbar: React.FC = () => {
             <CartSidebar
                 isOpen={isCartOpen}
                 onClose={closeCart}
-                cartItems={cartItems}
-                onUpdateQuantity={updateQuantity}
-                onRemoveItem={removeFromCart}
             />
             <div className={styles.inner}>
                 <Link href="/" className={styles.logo} aria-label="Zapp home">
@@ -155,7 +152,7 @@ const Navbar: React.FC = () => {
                         <>
                             {/* Cart Button - Dark/Brand Background */}
                             <button className={styles.cartButton} onClick={openCart}>
-                                <span className={styles.cartText}>Cart</span>
+
                                 <div className={styles.cartIconWrapper}>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -173,6 +170,7 @@ const Navbar: React.FC = () => {
                                         <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
                                     </svg>
                                 </div>
+                                <span className={styles.cartText}>Cart - <span>{items.length}</span> items</span>
                             </button>
 
                             {/* Profile Button - Light Style */}

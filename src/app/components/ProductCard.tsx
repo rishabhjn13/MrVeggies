@@ -1,83 +1,80 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './ProductCard.module.css';
-import Image from 'next/image';
 import { ProductSchema } from '../../types/database';
+import { useCartStore } from '@/store/useCartStore';
 
 interface ProductCardProps {
     product: ProductSchema;
     onAddToCart?: (productId: string) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+    const [added, setAdded] = useState(false);
+    const { items, addItem } = useCartStore();
     const discountPercentage = Math.round(
-        ((product.actual_price - product.discounted_price) / product.actual_price) * 100
+        ((Number(product.mrp) - Number(product.price)) / Number(product.mrp)) * 100
     );
 
-    const hasDiscount = product.discounted_price < product.actual_price;
+    const hasDiscount = Number(product.price) < Number(product.mrp);
+
+    const handleAddToCart = () => {
+
+        addItem(product);
+        setAdded(true)
+        setTimeout(() => setAdded(false), 1800);
+        console.log(items);
+    };
 
     return (
         <div className={styles.card}>
-            {/* Product Image */}
-            <div className={styles.imageContainer}>
-                {product.img_link ? (
-                    <Image
-                        src={product.img_link}
-                        alt={product.product_name}
-                        fill
-                        className={styles.image}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                ) : (
-                    <div className={styles.placeholderImage}>
-                        🛒
-                    </div>
-                )}
 
-                {/* Discount Badge */}
-                {hasDiscount && (
-                    <div className={styles.discountBadge}>
-                        -{Math.floor(discountPercentage)}%
-                    </div>
-                )}
+            {/* Shimmer top bar */}
+            <div className={styles.topBar} />
+
+            {/* Discount Badge */}
+            {hasDiscount && (
+                <div className={styles.discountBadge}>
+                    <span className={styles.discountArrow}>▼</span>
+                    {Math.floor(discountPercentage)}% off
+                </div>
+            )}
+
+            {/* Category chip */}
+            <div className={styles.categoryChip}>
+                {product.category}
             </div>
 
-            {/* Product Info */}
-            <div className={styles.info}>
-                <h3 className={styles.name}>{product.product_name}</h3>
+            {/* Product Name */}
+            <h3 className={styles.name}>{product.product_name}</h3>
 
-                <p className={styles.category}>{product.category}</p>
+            {/* Divider */}
+            <div className={styles.divider} />
 
-                {/* Pricing */}
-                <div className={styles.priceContainer}>
-                    <span className={styles.discountedPrice}>
-                        ₹{product.discounted_price}
-                    </span>
-
+            {/* Pricing Block */}
+            <div className={styles.priceBlock}>
+                <div className={styles.priceRow}>
+                    <span className={styles.discountedPrice}>₹{product.price}</span>
                     {hasDiscount && (
-                        <span className={styles.actualPrice}>
-                            ₹{product.actual_price}
-                        </span>
+                        <span className={styles.actualPrice}>₹{product.mrp}</span>
                     )}
                 </div>
-
-                {/* Rating */}
-                <div className={styles.ratingContainer}>
-                    <span className={styles.rating}>⭐ {product.rating}</span>
-                    <span className={styles.ratingCount}>
-                        ({product.rating_count?.toLocaleString()})
-                    </span>
-                </div>
-
-                {/* Add to Cart Button */}
-                <button
-                    className={styles.addBtn}
-                    onClick={() => onAddToCart?.(product.product_id)}
-                >
-                    Add to Cart
-                </button>
+                {hasDiscount && (
+                    <p className={styles.savingsTag}>
+                        You save ₹{(Number(product.mrp) - Number(product.price)).toFixed(0)}
+                    </p>
+                )}
             </div>
+
+            {/* Add to Cart Button */}
+            <button
+                className={`${styles.addBtn} ${added ? styles.addedState : ''}`}
+                onClick={handleAddToCart}
+            >
+                <span className={styles.btnIcon}>{added ? '✓' : '+'}</span>
+                <span>{added ? 'Added!' : 'Add to Cart'}</span>
+            </button>
         </div>
     );
 };

@@ -11,7 +11,7 @@ import { ProductSchema } from '@/types/database';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Toaster } from 'react-hot-toast';
 
-const CATEGORIES = ['All', 'Dairy', 'Fruits', 'Vegetables', 'Groceries', 'Beverages'] as const;
+const CATEGORIES = ['All', 'Fruits & Vegetables', 'Dairy & Breakfast', 'Snacks & Munchies', 'Cold Drinks & Juices', 'Instant & Frozen Food', 'Grocery & Staples', 'Household Care', 'Personal Care', 'Baby Care', 'Pet Care', 'Pharmacy'] as const;
 
 const SORT_OPTIONS = [
     { value: 'relevance', label: 'Relevance' },
@@ -77,13 +77,12 @@ const SearchPage: React.FC = () => {
                 console.log('🔍 [FETCH] Field check on first product:');
                 console.log('  product_name:', first.product_name, '| type:', typeof first.product_name);
                 console.log('  category:', first.category, '| type:', typeof first.category);
-                console.log('  actual_price:', first.actual_price, '| type:', typeof first.actual_price);
-                console.log('  rating:', first.rating, '| type:', typeof first.rating);
+                console.log('  price:', first.price, '| type:', typeof first.price);
 
                 // Check for undefined fields — most common bug when Firestore field names differ
                 if (!first.product_name) console.error('❌ [FETCH] product_name is undefined/null on first product! Fuse will find nothing.');
                 if (!first.category) console.warn('⚠️ [FETCH] category is undefined/null on first product.');
-                if (first.actual_price === undefined) console.error('❌ [FETCH] actual_price is undefined on first product! Price filter will break.');
+                if (first.price === undefined) console.error('❌ [FETCH] price is undefined on first product! Price filter will break.');
 
                 setAllProducts(products);
                 setIsLoading(false);
@@ -167,33 +166,20 @@ const SearchPage: React.FC = () => {
         const max = maxPrice !== '' ? Number(maxPrice) : Infinity;
         const beforePrice = pool.length;
         pool = pool.filter((p) => {
-            const price = typeof p.actual_price === 'string'
-                ? Number(String(p.actual_price).replace(/[^0-9.]/g, ''))
-                : p.actual_price;
+            const price = typeof p.price === 'string'
+                ? Number(String(p.price).replace(/[^0-9.]/g, ''))
+                : p.price;
             return price >= min && price <= max;
         });
         if (pool.length !== beforePrice) {
             console.log(`  💰 Price filter [${min}, ${max}]: ${beforePrice} → ${pool.length}`);
         }
 
-        // Rating filter
-        if (minRating > 0) {
-            const beforeRating = pool.length;
-            pool = pool.filter((p) => p.rating >= minRating);
-            console.log(`  ⭐ Rating filter ≥${minRating}: ${beforeRating} → ${pool.length}`);
-            if (pool.length === 0) {
-                console.warn('  ⚠️ Rating filter wiped all results. Sample ratings in data:',
-                    allProducts.slice(0, 10).map(p => p.rating)
-                );
-            }
-        }
-
         // Sort
         const sorted = [...pool];
         switch (sortBy) {
-            case 'price-asc': sorted.sort((a, b) => a.actual_price - b.actual_price); break;
-            case 'price-desc': sorted.sort((a, b) => b.actual_price - a.actual_price); break;
-            case 'rating': sorted.sort((a, b) => b.rating - a.rating); break;
+            case 'price-asc': sorted.sort((a, b) => Number(a.price) - Number(b.price)); break;
+            case 'price-desc': sorted.sort((a, b) => Number(b.price) - Number(a.price)); break;
             case 'name': sorted.sort((a, b) => a.product_name.localeCompare(b.product_name)); break;
         }
 
@@ -281,13 +267,7 @@ const SearchPage: React.FC = () => {
                             onKeyDown={handleKeyDown}
                             aria-label="Search products"
                         />
-                        {inputValue.length > 0 && (
-                            <button
-                                className={styles.clearInputBtn}
-                                onClick={() => { setInputValue(''); setActiveQuery(''); }}
-                                aria-label="Clear search"
-                            >✕</button>
-                        )}
+
                         <button className={styles.searchBtn} onClick={handleSearch}>Search</button>
                     </div>
                     <div className={styles.sortContainer}>
@@ -371,7 +351,7 @@ const SearchPage: React.FC = () => {
                         <div className={styles.productGrid}>
                             {results.length > 0 ? (
                                 results.map((product) => (
-                                    <ProductCard key={product.id} product={product} />
+                                    <ProductCard key={product.product_id} product={product} />
                                 ))
                             ) : (
                                 <div className={styles.noResults}>
