@@ -1,56 +1,386 @@
-/* Footer.module.css */
-
+/* ─── Footer Shell ───────────────────────────────────────── */
 .footer {
+  background: var(--c-surface);
   border-top: 1px solid var(--c-border);
-  padding: 36px 5vw 28px;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Subtle radial glow in the corner */
+.footer::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--c-brand) 7%, transparent) 0%, transparent 70%);
+  top: -160px;
+  right: -100px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Wave Divider ───────────────────────────────────────── */
+.waveDivider {
+  width: 100%;
+  line-height: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.waveDivider svg {
+  width: 100%;
+  height: 40px;
+  display: block;
+}
+
+/* ─── Main Inner ─────────────────────────────────────────── */
 .inner {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 52px 5vw 48px;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 64px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Brand Column ───────────────────────────────────────── */
+.brandCol {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 20px;
 }
 
+/* Logo */
 .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  width: fit-content;
+}
+
+.logoMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: var(--c-brand);
+  color: #fff;
+  border-radius: 10px;
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  flex-shrink: 0;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.logo:hover .logoMark {
+  transform: scale(1.08) rotate(-5deg);
+}
+
+.logoText {
+  font-family: var(--font-display);
+  font-size: 21px;
   font-weight: 800;
-  color: var(--c-brand);
+  color: var(--c-text);
   letter-spacing: -0.5px;
 }
 
 .logoDot {
-  color: var(--c-accent);
+  color: var(--c-brand);
 }
 
-.links {
+/* Tagline */
+.tagline {
+  font-size: 14px;
+  color: var(--c-muted);
+  line-height: 1.65;
+  margin: 0;
+  max-width: 240px;
+}
+
+/* ─── App Badges ─────────────────────────────────────────── */
+.appBadges {
   display: flex;
-  gap: 24px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
-.link {
-  font-size: 13px;
-  color: var(--c-muted);
+.appBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--c-border);
+  background: var(--c-bg);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--c-text);
+  text-decoration: none;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+
+.appBadge svg {
+  color: var(--c-text);
+  flex-shrink: 0;
   transition: color 0.2s;
 }
-.link:hover {
+
+.appBadge:hover {
+  border-color: var(--c-brand);
+  background: color-mix(in srgb, var(--c-brand) 5%, transparent);
+  color: var(--c-brand);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--c-brand) 14%, transparent);
+}
+
+.appBadge:hover svg {
+  color: var(--c-brand);
+}
+
+/* ─── Socials ────────────────────────────────────────────── */
+.socials {
+  display: flex;
+  gap: 8px;
+}
+
+.socialIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1.5px solid var(--c-border);
+  background: var(--c-bg);
+  color: var(--c-muted);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.socialIcon:hover {
+  border-color: var(--c-brand);
+  background: color-mix(in srgb, var(--c-brand) 8%, transparent);
+  color: var(--c-brand);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--c-brand) 18%, transparent);
+}
+
+/* ─── Link Columns Grid ──────────────────────────────────── */
+.linksGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.linkCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.colHeading {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  color: var(--c-text);
+  margin: 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--c-brand);
+  width: fit-content;
+}
+
+.colLinks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.colLink {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--c-muted);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  transition: color 0.2s, gap 0.2s;
+  position: relative;
+}
+
+.colLink::before {
+  content: '›';
+  opacity: 0;
+  font-size: 15px;
+  color: var(--c-brand);
+  margin-right: 0;
+  width: 0;
+  overflow: hidden;
+  transition: opacity 0.2s, width 0.2s, margin-right 0.2s;
+}
+
+.colLink:hover {
   color: var(--c-text);
 }
 
+.colLink:hover::before {
+  opacity: 1;
+  width: 10px;
+  margin-right: 4px;
+}
+
+/* ─── Bottom Bar ─────────────────────────────────────────── */
+.bottomBar {
+  border-top: 1px solid var(--c-border);
+  position: relative;
+  z-index: 1;
+}
+
+.bottomInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 18px 5vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
 .copy {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--c-muted);
+  margin: 0;
+}
+
+.bottomRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.madeWith {
+  font-size: 12.5px;
+  color: var(--c-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.heart {
+  color: #e8534a;
+  font-size: 13px;
+  display: inline-block;
+  animation: heartbeat 2.4s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  14% {
+    transform: scale(1.3);
+  }
+
+  28% {
+    transform: scale(1);
+  }
+
+  42% {
+    transform: scale(1.15);
+  }
+
+  56% {
+    transform: scale(1);
+  }
+}
+
+.bottomDot {
+  display: block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--c-border);
+  flex-shrink: 0;
+}
+
+.fssai {
+  font-size: 11.5px;
+  color: var(--c-muted);
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+/* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 44px 5vw 40px;
+  }
+
+  .brandCol {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 28px;
+  }
+
+  .tagline {
+    max-width: 100%;
+    width: 100%;
+    order: 3;
+  }
+
+  .appBadges {
+    order: 4;
+  }
+
+  .socials {
+    order: 5;
+  }
+
+  .linksGrid {
+    gap: 24px;
+  }
 }
 
 @media (max-width: 640px) {
-  .inner {
+  .brandCol {
+    flex-direction: column;
+  }
+
+  .linksGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .bottomInner {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 8px;
+  }
+
+  .bottomRight {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 400px) {
+  .linksGrid {
+    grid-template-columns: 1fr;
   }
 }

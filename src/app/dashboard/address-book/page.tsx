@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import styles from './AddressBook.module.css';
 import Navbar from '@/app/components/Navbar';
+import AddressFormModal from '@/app/components/AddressformModal';
 interface Address {
     id: string;
     type: 'Home' | 'Work' | 'Other';
@@ -31,6 +32,7 @@ const AddressBook = () => {
     return (
         <>
             <Navbar />
+            <AddressFormModal isOpen={showAddForm} onClose={() => setShowAddForm(false)} onSave={() => { }} />
             <div className={styles.page}>
                 <div className={styles.container}>
                     <div className={styles.header}>

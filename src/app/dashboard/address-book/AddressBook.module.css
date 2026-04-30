@@ -1,4 +1,4 @@
-/* ─── Page Shell ─────────────────────────────────────────── */
+/* --- Page Shell ------------------------------------------- */
 .page {
     min-height: 100vh;
     background: var(--c-bg);
@@ -35,7 +35,6 @@
     left: -80px;
 }
 
-/* ─── Container ──────────────────────────────────────────── */
 .container {
     max-width: 860px;
     margin: 0 auto;
@@ -43,7 +42,7 @@
     z-index: 1;
 }
 
-/* ─── Header ─────────────────────────────────────────────── */
+/* --- Header ----------------------------------------------- */
 .header {
     display: flex;
     justify-content: space-between;
@@ -75,7 +74,7 @@
     margin-top: 10px;
 }
 
-/* ─── Add Button ─────────────────────────────────────────── */
+/* --- Add Button ------------------------------------------- */
 .addBtn {
     display: inline-flex;
     align-items: center;
@@ -117,13 +116,13 @@
     transform: translateY(0);
 }
 
-/* ─── Address List ───────────────────────────────────────── */
+/* --- Address List ----------------------------------------- */
 .addressList {
     display: grid;
     gap: 20px;
 }
 
-/* ─── Address Card ───────────────────────────────────────── */
+/* --- Address Card ----------------------------------------- */
 .addressCard {
     background: var(--c-surface);
     border: 1px solid var(--c-border);
@@ -196,7 +195,7 @@
     grid-column: 2;
 }
 
-/* ─── Card Inner Padding wrapper ─────────────────────────── */
+/* --- Card Inner Padding wrapper --------------------------- */
 /* We wrap all card content in padding via direct children */
 .addressHeader {
     display: flex;
@@ -237,7 +236,7 @@
     opacity: 0.85;
 }
 
-/* ─── Type Badge ─────────────────────────────────────────── */
+/* --- Type Badge ------------------------------------------- */
 .addressType {
     display: inline-block;
     font-size: 11px;
@@ -251,7 +250,7 @@
     border: 1px solid color-mix(in srgb, var(--c-brand) 25%, transparent);
 }
 
-/* ─── Default Badge ──────────────────────────────────────── */
+/* --- Default Badge ---------------------------------------- */
 .defaultBadge {
     display: inline-flex;
     align-items: center;
@@ -274,7 +273,7 @@
     font-weight: 900;
 }
 
-/* ─── Actions Row ────────────────────────────────────────── */
+/* --- Actions Row ------------------------------------------ */
 .actions {
     display: flex;
     gap: 10px;
@@ -319,7 +318,7 @@
     transform: translateY(-1px);
 }
 
-/* ─── Empty State (optional, future-proof) ───────────────── */
+/* --- Empty State (optional, future-proof) ----------------- */
 .emptyState {
     text-align: center;
     padding: 80px 20px;
@@ -337,7 +336,7 @@
     font-weight: 600;
 }
 
-/* ─── Responsive ─────────────────────────────────────────── */
+/* --- Responsive ------------------------------------------- */
 @media (max-width: 640px) {
     .header h1 {
         font-size: 30px;
