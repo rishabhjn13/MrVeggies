@@ -2,7 +2,7 @@
 
 This portfolio project is a quick-commerce store built using Next.js, Zustand, and Firebase. It allows users to browse and purchase fresh vegetables, fruits and other daily products online. The application provides a seamless shopping experience with features such as product listing, shopping cart, and user authentication.
 
-Live Hosted - [MrVeggies Store](https://mrveggies-qcommercestore.vercel.app)
+Live Hosted - [MrVeggies Store](https://mr-veggies.vercel.app/)
 
 ### Features
 
