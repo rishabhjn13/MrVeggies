@@ -49,16 +49,21 @@ const LoginPage = () => {
                 router.push("/");
             }, 2000);
 
-        } catch (error: any) {
+        } catch (error: unknown) { // Use unknown instead of any
             console.error(error);
             let errorMessage = "Invalid email or password";
 
-            if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
-                errorMessage = "Invalid email or password";
-            } else if (error.code === "auth/invalid-email") {
-                errorMessage = "Invalid email format";
-            } else if (error.code === "auth/too-many-requests") {
-                errorMessage = "Too many attempts. Try again later.";
+            // Type guard: Check if error is an object with a 'code' property
+            if (error && typeof error === "object" && "code" in error) {
+                const firebaseError = error as { code: string };
+
+                if (firebaseError.code === "auth/user-not-found" || firebaseError.code === "auth/wrong-password") {
+                    errorMessage = "Invalid email or password";
+                } else if (firebaseError.code === "auth/invalid-email") {
+                    errorMessage = "Invalid email format";
+                } else if (firebaseError.code === "auth/too-many-requests") {
+                    errorMessage = "Too many attempts. Try again later.";
+                }
             }
 
             toast.error(errorMessage);
@@ -91,9 +96,15 @@ const LoginPage = () => {
             toast.success("Logged in successfully!");
             router.push("/dashboard");
             return result;
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
-            toast.error(error?.message || "Google login failed");
+            let errorMessage = "Google login failed";
+
+            if (error && typeof error === "object" && "message" in error) {
+                errorMessage = (error as { message: string }).message;
+            }
+
+            toast.error(errorMessage);
         } finally {
             setIsGoogleLoading(false);
         }

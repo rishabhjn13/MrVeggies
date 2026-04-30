@@ -204,7 +204,7 @@ const SecurityPage = () => {
                             <div className={styles.cardIcon}>🔑</div>
                             <div>
                                 <h2 className={styles.cardTitle}>Change Password</h2>
-                                <p className={styles.cardSub}>Use a strong, unique password you don't use elsewhere.</p>
+                                <p className={styles.cardSub}>Use a strong, unique password you don&apos;t use elsewhere.</p>
                             </div>
                         </div>
 

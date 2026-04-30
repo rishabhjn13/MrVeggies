@@ -143,7 +143,7 @@ const WriteToUs = () => {
                             <p className={styles.eyebrow}>Support</p>
                             <h1 className={styles.pageTitle}>Write to Us</h1>
                             <p className={styles.pageSubtitle}>
-                                Have a question or issue? We're here to help — typically within 24 hours.
+                                Have a question or issue? We&apos;re here to help — typically within 24 hours.
                             </p>
                         </div>
                         <div className={styles.supportMeta}>
@@ -165,7 +165,7 @@ const WriteToUs = () => {
                             <div className={styles.formSection}>
                                 <p className={styles.formSectionLabel}>
                                     <span className={styles.stepNum}>1</span>
-                                    What's your issue about?
+                                    What&apos;s your issue about?
                                 </p>
                                 <div className={styles.categoryGrid}>
                                     {CATEGORIES.map(cat => (

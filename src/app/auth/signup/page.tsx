@@ -9,6 +9,7 @@ import { signInWithGoogle, signUpWithEmail } from "@/services/lib/auth";
 import styles from "@/app/components/auth/AuthForm.module.css";
 
 import toast, { Toaster } from "react-hot-toast";
+import { FirebaseError } from "firebase/app";
 
 
 const SignupPage = () => {
@@ -42,9 +43,13 @@ const SignupPage = () => {
             toast.success("Logged in successfully!");
             router.push("/dashboard");
             return result;
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
-            toast.error(error?.message || "Google login failed");
+            if (error instanceof FirebaseError) {
+                toast.error(error.message);
+            } else {
+                toast.error("Google login failed");
+            }
         } finally {
             setIsGoogleLoading(false);
         }
@@ -79,19 +84,25 @@ const SignupPage = () => {
             toast.success("Account created successfully!");
             router.push("/dashboard");
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
 
-            // Firebase error messages ko user-friendly banayein
             let errorMessage = "Invalid email or password";
 
-            if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
-                errorMessage = "Invalid email or password";
-            } else if (error.code === "auth/invalid-email") {
-                errorMessage = "Invalid email format";
-            } else if (error.code === "auth/too-many-requests") {
-                errorMessage = "Too many attempts. Try again later.";
-            } else if (error.message) {
+            // Check if the error is an instance of FirebaseError
+            if (error instanceof FirebaseError) {
+                // Now 'error' is typed, and 'error.code' is safe to access
+                if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
+                    errorMessage = "Invalid email or password";
+                } else if (error.code === "auth/invalid-email") {
+                    errorMessage = "Invalid email format";
+                } else if (error.code === "auth/too-many-requests") {
+                    errorMessage = "Too many attempts. Try again later.";
+                } else {
+                    errorMessage = error.message;
+                }
+            } else if (error instanceof Error) {
+                // Handle standard JS errors
                 errorMessage = error.message;
             }
 

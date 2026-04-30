@@ -15,7 +15,7 @@ interface Address {
 }
 
 const AddressBook = () => {
-    const [addresses, setAddresses] = useState<Address[]>([
+    const [addresses,] = useState<Address[]>([
         {
             id: '1',
             type: 'Home',
@@ -32,7 +32,7 @@ const AddressBook = () => {
     return (
         <>
             <Navbar />
-            <AddressFormModal isOpen={showAddForm} onClose={() => setShowAddForm(false)} onSave={() => { }} />
+            <AddressFormModal isOpen={showAddForm ? true : false} onClose={() => setShowAddForm(false)} onSave={() => { }} />
             <div className={styles.page}>
                 <div className={styles.container}>
                     <div className={styles.header}>

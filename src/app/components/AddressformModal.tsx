@@ -50,14 +50,6 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({ isOpen, onClose, on
     const [errors, setErrors] = useState<Partial<Record<keyof AddressFormData, string>>>({});
     const [saving, setSaving] = useState(false);
 
-    // Reset form whenever modal opens
-    useEffect(() => {
-        if (isOpen) {
-            setForm(EMPTY_FORM);
-            setErrors({});
-        }
-    }, [isOpen]);
-
     // Close on Escape
     useEffect(() => {
         const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };

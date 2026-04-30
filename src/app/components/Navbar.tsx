@@ -19,14 +19,12 @@ const NAV_LINKS = [
 const Navbar: React.FC = () => {
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-    const [currentAddress, setCurrentAddress] = useState<string | null>("St. Mungo's Hospital, London");
-    const [addressLoading, setAddressLoading] = useState(false);
+    const [addressLoading, setAddressLoading] = useState(true);
+    const [currentAddress, setCurrentAddress] = useState("Detecting location...");
     const menuRef = useRef<HTMLDivElement>(null);
     const user = useAuthStore((state) => state.user);
 
     const updateAddress = () => {
-        setAddressLoading(true);
-        setCurrentAddress("Locating…");
 
         navigator.geolocation.getCurrentPosition(
             async (position) => {
