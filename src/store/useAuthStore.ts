@@ -2,7 +2,9 @@ import { onAuthStateChanged } from "firebase/auth";
 import { create } from "zustand";
 import { auth, db } from "../services/firebase/firebase";
 import { doc, getDoc } from "@firebase/firestore";
+import type { Gender } from '@/lib/constants/profile';
 
+export type { Gender };
 export interface User {
   uid: string;
   email: string | null;
@@ -10,6 +12,10 @@ export interface User {
   phoneNumber?: string;
   dateOfBirth?: string;
   photoURL?: string;
+  gender?: Gender;
+  city?: string;
+  bio?: string;
+  whatsappNotifications?: boolean;
 }
 
 interface AuthState {
@@ -33,7 +39,7 @@ export const initializeAuth = () => {
 
   const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
     if (firebaseUser) {
-      const userDocRef = doc(db, "users", firebaseUser.uid);
+      const userDocRef = doc(db, "user_information", firebaseUser.uid);
       const userDoc = await getDoc(userDocRef);
       const firestoreData = userDoc.exists() ? userDoc.data() : {};
 
@@ -46,6 +52,11 @@ export const initializeAuth = () => {
           firestoreData.phoneNumber ?? firebaseUser.phoneNumber ?? undefined,
         photoURL: firestoreData.photoURL ?? firebaseUser.photoURL ?? undefined,
         dateOfBirth: firestoreData.dateOfBirth ?? undefined,
+        city: firestoreData.city ?? undefined,
+        bio: firestoreData.bio ?? undefined,
+        gender: firestoreData.gender ?? undefined,
+        whatsappNotifications:
+          firestoreData.whatsappNotifications ?? undefined,
       });
     } else {
       setUser(null);

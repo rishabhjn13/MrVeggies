@@ -1,0 +1,232 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease;
+}
+
+.modal {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px 32px;
+    box-shadow: var(--shadow-float);
+    animation: slideUp 0.25s ease;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--c-muted);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.closeBtn:hover:not(:disabled) {
+    background: var(--c-bg);
+    color: var(--c-text);
+}
+
+.title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--c-text);
+    letter-spacing: -0.8px;
+    margin: 0 0 8px;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 14.5px;
+    color: var(--c-muted);
+    margin: 0 0 28px;
+    text-align: center;
+}
+
+/* Preview */
+.preview {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 28px;
+    border-radius: 50%;
+    border: 6px solid var(--c-surface);
+    background: var(--c-brand-light);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.previewImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.previewHidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.previewPlaceholder {
+    font-size: 34px;
+    color: var(--c-muted);
+}
+
+/* Field */
+.field label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    margin-bottom: 9px;
+}
+
+.field input {
+    width: 100%;
+    padding: 14px 18px;
+    background: var(--c-bg);
+    border: 1.5px solid var(--c-border);
+    border-radius: var(--radius-md);
+    font-size: 16px;
+    font-family: inherit;
+    color: var(--c-text);
+    transition: all 0.25s ease;
+}
+
+.field input:focus {
+    outline: none;
+    border-color: var(--c-brand);
+    box-shadow: 0 0 0 3px rgba(0, 168, 119, 0.08);
+}
+
+.field input[aria-invalid='true'] {
+    border-color: var(--c-error);
+}
+
+.error {
+    margin: 8px 0 0;
+    font-size: 13.5px;
+    color: var(--c-error);
+}
+
+/* Actions */
+.actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.cancelBtn,
+.saveBtn {
+    flex: 1;
+    padding: 14px;
+    border-radius: var(--radius-pill);
+    font-size: 15.5px;
+    font-weight: 700;
+    font-family: var(--font-display);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.cancelBtn {
+    background: transparent;
+    border: 1.5px solid var(--c-border);
+    color: var(--c-muted);
+}
+
+.cancelBtn:hover:not(:disabled) {
+    border-color: var(--c-brand);
+    color: var(--c-brand);
+}
+
+.saveBtn {
+    background: var(--c-brand);
+    border: none;
+    color: white;
+    box-shadow: var(--shadow-btn);
+}
+
+.saveBtn:hover:not(:disabled) {
+    background: var(--c-brand-dark);
+    transform: translateY(-2px);
+}
+
+.cancelBtn:disabled,
+.saveBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 640px) {
+    .modal {
+        padding: 32px 22px 24px;
+    }
+}
+
+.removeBtn {
+    display: block;
+    margin: 20px auto 0;
+    padding: 4px 8px;
+    background: none;
+    border: none;
+    color: var(--c-error);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.removeBtn:hover:not(:disabled) {
+    text-decoration: underline;
+}
+
+.removeBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

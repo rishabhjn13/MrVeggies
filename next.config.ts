@@ -6,16 +6,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "m.media-amazon.com",
-      },
-      {
-        protocol: "https",
-        hostname: "lh3.googleusercontent.com",
-        port: "",
-        pathname: "/a/**",
+        hostname: "**",
       },
     ],
   },
+  allowedDevOrigins: ['10.73.24.61'],
 };
 
 export default nextConfig;

@@ -29,7 +29,7 @@ const productConverter: FirestoreDataConverter<ProductSchema> = {
 // 2. Collection Reference
 const productsRef = collection(db, "products").withConverter(productConverter);
 
-/** --- CRUD FUNCTIONS --- **/
+/** --- CRUD FUNCTIONS --- **/  
 
 // WRITE
 export const createProduct = async (product: ProductSchema) => {

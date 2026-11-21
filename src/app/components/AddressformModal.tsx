@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './AddressFormModal.module.css';
-
-type AddressType = 'Home' | 'Work' | 'Other';
+import type { Address, AddressInput, AddressType } from '@/types/address';
 
 interface AddressFormData {
     type: AddressType;
@@ -21,7 +20,9 @@ interface AddressFormData {
 interface AddressFormModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (data: AddressFormData) => void;
+    onSave: (data: AddressInput) => void;
+    /** When set, the form is prefilled and the modal acts as "Edit address" */
+    initialValues?: Address | null;
 }
 
 const EMPTY_FORM: AddressFormData = {
@@ -37,25 +38,81 @@ const EMPTY_FORM: AddressFormData = {
     isDefault: false,
 };
 
+const toFormData = (a: Address): AddressFormData => ({
+    type: a.type,
+    name: a.name,
+    phone: a.phone,
+    addressLine1: a.addressLine1,
+    addressLine2: a.addressLine2 ?? '',
+    landmark: a.landmark ?? '',
+    city: a.city,
+    state: a.state,
+    pincode: a.pincode,
+    isDefault: a.isDefault,
+});
+
 const ADDRESS_TYPES: AddressType[] = ['Home', 'Work', 'Other'];
 
-const TYPE_ICONS: Record<AddressType, string> = {
-    Home: '🏠',
-    Work: '💼',
-    Other: '📍',
-};
+const STATES = [
+    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
+    'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka',
+    'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram',
+    'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu',
+    'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal',
+    'Delhi', 'Jammu & Kashmir', 'Ladakh',
+];
 
-const AddressFormModal: React.FC<AddressFormModalProps> = ({ isOpen, onClose, onSave }) => {
+type Errors = Partial<Record<keyof AddressFormData, string>>;
+
+/** Label + control + error. Defined outside the modal so inputs keep focus while typing. */
+const Field = ({ id, label, optional, error, children }: {
+    id: string; label: string; optional?: boolean; error?: string; children: React.ReactNode;
+}) => (
+    <div className={styles.fieldGroup}>
+        <label className={styles.label} htmlFor={id}>
+            {label}
+            {optional && <span className={styles.optional}> (optional)</span>}
+        </label>
+        {children}
+        {error && <span id={`${id}-error`} className={styles.errorMsg} role="alert">{error}</span>}
+    </div>
+);
+
+/** Accessibility attributes linking an input to its error message */
+const a11y = (id: string, error?: string) => ({
+    id,
+    'aria-invalid': error ? true : undefined,
+    'aria-describedby': error ? `${id}-error` : undefined,
+});
+
+const AddressFormModal: React.FC<AddressFormModalProps> = ({ isOpen, onClose, onSave, initialValues }) => {
+    const isEditing = !!initialValues;
     const [form, setForm] = useState<AddressFormData>(EMPTY_FORM);
-    const [errors, setErrors] = useState<Partial<Record<keyof AddressFormData, string>>>({});
+    const [errors, setErrors] = useState<Errors>({});
     const [saving, setSaving] = useState(false);
+    const nameRef = useRef<HTMLInputElement>(null);
 
-    // Close on Escape
+    // Prefill for edit, or start clean for add, every time the modal opens
     useEffect(() => {
-        const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-        document.addEventListener('keydown', handler);
-        return () => document.removeEventListener('keydown', handler);
-    }, [onClose]);
+        if (!isOpen) return;
+        setForm(initialValues ? toFormData(initialValues) : EMPTY_FORM);
+        setErrors({});
+        setSaving(false);
+        nameRef.current?.focus();
+    }, [isOpen, initialValues]);
+
+    // While open: close on Escape and lock page scroll
+    useEffect(() => {
+        if (!isOpen) return;
+        const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        document.addEventListener('keydown', onKey);
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            document.removeEventListener('keydown', onKey);
+        };
+    }, [isOpen, onClose]);
 
     const set = <K extends keyof AddressFormData>(key: K, value: AddressFormData[K]) => {
         setForm(prev => ({ ...prev, [key]: value }));
@@ -63,239 +120,167 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({ isOpen, onClose, on
     };
 
     const validate = (): boolean => {
-        const newErrors: Partial<Record<keyof AddressFormData, string>> = {};
-        if (!form.name.trim()) newErrors.name = 'Full name is required';
-        if (!form.phone.trim()) newErrors.phone = 'Phone number is required';
-        else if (!/^\+?[\d\s\-]{8,15}$/.test(form.phone.trim()))
-            newErrors.phone = 'Enter a valid phone number';
-        if (!form.addressLine1.trim()) newErrors.addressLine1 = 'Address is required';
-        if (!form.city.trim()) newErrors.city = 'City is required';
-        if (!form.state.trim()) newErrors.state = 'State is required';
-        if (!form.pincode.trim()) newErrors.pincode = 'Pincode is required';
-        else if (!/^\d{6}$/.test(form.pincode.trim()))
-            newErrors.pincode = 'Enter a valid 6-digit pincode';
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        const next: Errors = {};
+        if (!form.name.trim()) next.name = 'Full name is required';
+        if (!form.phone.trim()) next.phone = 'Phone number is required';
+        else if (!/^\+?[\d\s\-]{8,15}$/.test(form.phone.trim())) next.phone = 'Enter a valid phone number';
+        if (!form.addressLine1.trim()) next.addressLine1 = 'Address is required';
+        if (!form.city.trim()) next.city = 'City is required';
+        if (!form.state.trim()) next.state = 'State is required';
+        if (!form.pincode.trim()) next.pincode = 'Pincode is required';
+        else if (!/^\d{6}$/.test(form.pincode.trim())) next.pincode = 'Enter a valid 6-digit pincode';
+        setErrors(next);
+        return Object.keys(next).length === 0;
     };
 
     const handleSave = async () => {
         if (!validate()) return;
         setSaving(true);
         await new Promise(r => setTimeout(r, 600)); // simulate async
-        onSave(form);
+        onSave({
+            type: form.type,
+            name: form.name.trim(),
+            phone: form.phone.trim(),
+            addressLine1: form.addressLine1.trim(),
+            addressLine2: form.addressLine2.trim() || undefined,
+            landmark: form.landmark.trim() || undefined,
+            city: form.city.trim(),
+            state: form.state,
+            pincode: form.pincode.trim(),
+            isDefault: form.isDefault,
+        });
         setSaving(false);
         onClose();
     };
 
     if (!isOpen) return null;
 
+    const title = isEditing ? 'Edit address' : 'Add address';
+
     return (
-        <div className={styles.overlay} onClick={onClose} aria-modal="true" role="dialog">
+        <div className={styles.overlay} onClick={onClose}>
             {/* Panel stops click propagation so clicking inside doesn't close */}
             <aside
-                className={`${styles.panel} ${isOpen ? styles.panelOpen : ''}`}
+                className={styles.panel}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="addr-modal-title"
                 onClick={e => e.stopPropagation()}
             >
-                {/* ── Panel Header ── */}
+                {/* Header */}
                 <div className={styles.panelHeader}>
                     <div className={styles.panelTitleGroup}>
-                        <span className={styles.panelEyebrow}>Address Book</span>
-                        <h2 className={styles.panelTitle}>Add New Address</h2>
+                        <h2 className={styles.panelTitle} id="addr-modal-title">{title}</h2>
+                        <p className={styles.panelSub}>
+                            {isEditing ? 'Update the details for this address.' : 'Enter the delivery details for this address.'}
+                        </p>
                     </div>
-                    <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                            <path d="M2 2l14 14M16 2L2 16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+                    <button className={styles.closeBtn} onClick={onClose} aria-label="Close" type="button">
+                        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                            <path d="M3 3l12 12M15 3L3 15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
                         </svg>
                     </button>
                 </div>
 
-                {/* ── Scrollable body ── */}
+                {/* Body */}
                 <div className={styles.panelBody}>
 
-                    {/* Address Type Selector */}
                     <div className={styles.fieldGroup}>
-                        <label className={styles.label}>Address Type</label>
-                        <div className={styles.typeRow}>
+                        <span className={styles.label} id="addr-type-label">Address type</span>
+                        <div className={styles.segmented} role="radiogroup" aria-labelledby="addr-type-label">
                             {ADDRESS_TYPES.map(t => (
                                 <button
                                     key={t}
                                     type="button"
-                                    className={`${styles.typeBtn} ${form.type === t ? styles.typeBtnActive : ''}`}
+                                    role="radio"
+                                    aria-checked={form.type === t}
+                                    className={`${styles.segment} ${form.type === t ? styles.segmentActive : ''}`}
                                     onClick={() => set('type', t)}
                                 >
-                                    <span className={styles.typeIcon}>{TYPE_ICONS[t]}</span>
                                     {t}
                                 </button>
                             ))}
                         </div>
                     </div>
 
-                    {/* Divider */}
-                    <div className={styles.sectionLabel}>Contact Details</div>
+                    <h3 className={styles.sectionTitle}>Contact details</h3>
 
-                    {/* Full Name */}
-                    <div className={styles.fieldGroup}>
-                        <label className={styles.label} htmlFor="addr-name">Full Name</label>
-                        <input
-                            id="addr-name"
+                    <Field id="addr-name" label="Full name" error={errors.name}>
+                        <input {...a11y('addr-name', errors.name)} ref={nameRef}
                             className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-                            type="text"
-                            placeholder="e.g. Rishabh Jain"
-                            value={form.name}
-                            onChange={e => set('name', e.target.value)}
-                        />
-                        {errors.name && <span className={styles.errorMsg}>{errors.name}</span>}
-                    </div>
+                            type="text" autoComplete="name" placeholder="As it should appear on the delivery"
+                            value={form.name} onChange={e => set('name', e.target.value)} />
+                    </Field>
 
-                    {/* Phone */}
-                    <div className={styles.fieldGroup}>
-                        <label className={styles.label} htmlFor="addr-phone">Phone Number</label>
-                        <div className={styles.inputWithPrefix}>
-                            <span className={styles.inputPrefix}>📞</span>
-                            <input
-                                id="addr-phone"
-                                className={`${styles.input} ${styles.inputPrefixed} ${errors.phone ? styles.inputError : ''}`}
-                                type="tel"
-                                placeholder="+91 98765 43210"
-                                value={form.phone}
-                                onChange={e => set('phone', e.target.value)}
-                            />
-                        </div>
-                        {errors.phone && <span className={styles.errorMsg}>{errors.phone}</span>}
-                    </div>
+                    <Field id="addr-phone" label="Phone number" error={errors.phone}>
+                        <input {...a11y('addr-phone', errors.phone)}
+                            className={`${styles.input} ${errors.phone ? styles.inputError : ''}`}
+                            type="tel" autoComplete="tel" placeholder="+91 98765 43210"
+                            value={form.phone} onChange={e => set('phone', e.target.value)} />
+                    </Field>
 
-                    {/* Divider */}
-                    <div className={styles.sectionLabel}>Address Details</div>
+                    <h3 className={styles.sectionTitle}>Address details</h3>
 
-                    {/* Address Line 1 */}
-                    <div className={styles.fieldGroup}>
-                        <label className={styles.label} htmlFor="addr-line1">Address Line 1 <span className={styles.required}>*</span></label>
-                        <input
-                            id="addr-line1"
+                    <Field id="addr-line1" label="Address line 1" error={errors.addressLine1}>
+                        <input {...a11y('addr-line1', errors.addressLine1)}
                             className={`${styles.input} ${errors.addressLine1 ? styles.inputError : ''}`}
-                            type="text"
-                            placeholder="House no., Building, Street"
-                            value={form.addressLine1}
-                            onChange={e => set('addressLine1', e.target.value)}
-                        />
-                        {errors.addressLine1 && <span className={styles.errorMsg}>{errors.addressLine1}</span>}
-                    </div>
+                            type="text" autoComplete="address-line1" placeholder="House no., building, street"
+                            value={form.addressLine1} onChange={e => set('addressLine1', e.target.value)} />
+                    </Field>
 
-                    {/* Address Line 2 */}
-                    <div className={styles.fieldGroup}>
-                        <label className={styles.label} htmlFor="addr-line2">Address Line 2 <span className={styles.optional}>(Optional)</span></label>
-                        <input
-                            id="addr-line2"
-                            className={styles.input}
-                            type="text"
-                            placeholder="Area, Colony, Locality"
-                            value={form.addressLine2}
-                            onChange={e => set('addressLine2', e.target.value)}
-                        />
-                    </div>
+                    <Field id="addr-line2" label="Address line 2" optional>
+                        <input id="addr-line2" className={styles.input}
+                            type="text" autoComplete="address-line2" placeholder="Area, colony, locality"
+                            value={form.addressLine2} onChange={e => set('addressLine2', e.target.value)} />
+                    </Field>
 
-                    {/* Landmark */}
-                    <div className={styles.fieldGroup}>
-                        <label className={styles.label} htmlFor="addr-landmark">Landmark <span className={styles.optional}>(Optional)</span></label>
-                        <input
-                            id="addr-landmark"
-                            className={styles.input}
-                            type="text"
-                            placeholder="Near Metro, Opposite Mall…"
-                            value={form.landmark}
-                            onChange={e => set('landmark', e.target.value)}
-                        />
-                    </div>
+                    <Field id="addr-landmark" label="Landmark" optional>
+                        <input id="addr-landmark" className={styles.input}
+                            type="text" placeholder="Nearby place that helps the delivery partner"
+                            value={form.landmark} onChange={e => set('landmark', e.target.value)} />
+                    </Field>
 
-                    {/* City + State row */}
                     <div className={styles.row}>
-                        <div className={styles.fieldGroup}>
-                            <label className={styles.label} htmlFor="addr-city">City <span className={styles.required}>*</span></label>
-                            <input
-                                id="addr-city"
+                        <Field id="addr-city" label="City" error={errors.city}>
+                            <input {...a11y('addr-city', errors.city)}
                                 className={`${styles.input} ${errors.city ? styles.inputError : ''}`}
-                                type="text"
-                                placeholder="New Delhi"
-                                value={form.city}
-                                onChange={e => set('city', e.target.value)}
-                            />
-                            {errors.city && <span className={styles.errorMsg}>{errors.city}</span>}
-                        </div>
+                                type="text" autoComplete="address-level2"
+                                value={form.city} onChange={e => set('city', e.target.value)} />
+                        </Field>
 
-                        <div className={styles.fieldGroup}>
-                            <label className={styles.label} htmlFor="addr-pincode">Pincode <span className={styles.required}>*</span></label>
-                            <input
-                                id="addr-pincode"
+                        <Field id="addr-pincode" label="Pincode" error={errors.pincode}>
+                            <input {...a11y('addr-pincode', errors.pincode)}
                                 className={`${styles.input} ${errors.pincode ? styles.inputError : ''}`}
-                                type="text"
-                                inputMode="numeric"
-                                maxLength={6}
-                                placeholder="110001"
-                                value={form.pincode}
-                                onChange={e => set('pincode', e.target.value.replace(/\D/g, ''))}
-                            />
-                            {errors.pincode && <span className={styles.errorMsg}>{errors.pincode}</span>}
-                        </div>
+                                type="text" inputMode="numeric" autoComplete="postal-code" maxLength={6}
+                                value={form.pincode} onChange={e => set('pincode', e.target.value.replace(/\D/g, ''))} />
+                        </Field>
                     </div>
 
-                    {/* State */}
-                    <div className={styles.fieldGroup}>
-                        <label className={styles.label} htmlFor="addr-state">State <span className={styles.required}>*</span></label>
-                        <select
-                            id="addr-state"
+                    <Field id="addr-state" label="State" error={errors.state}>
+                        <select {...a11y('addr-state', errors.state)}
                             className={`${styles.input} ${styles.select} ${errors.state ? styles.inputError : ''}`}
-                            value={form.state}
-                            onChange={e => set('state', e.target.value)}
-                        >
-                            <option value="">Select state…</option>
-                            {['Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
-                                'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka',
-                                'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram',
-                                'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu',
-                                'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal',
-                                'Delhi', 'Jammu & Kashmir', 'Ladakh'].map(s => (
-                                    <option key={s} value={s}>{s}</option>
-                                ))}
+                            autoComplete="address-level1"
+                            value={form.state} onChange={e => set('state', e.target.value)}>
+                            <option value="">Select state</option>
+                            {STATES.map(s => <option key={s} value={s}>{s}</option>)}
                         </select>
-                        {errors.state && <span className={styles.errorMsg}>{errors.state}</span>}
-                    </div>
+                    </Field>
 
-                    {/* Default toggle */}
-                    <label className={styles.defaultToggle}>
-                        <div className={`${styles.toggle} ${form.isDefault ? styles.toggleOn : ''}`}
-                            onClick={() => set('isDefault', !form.isDefault)}
-                            role="switch"
-                            aria-checked={form.isDefault}
-                            tabIndex={0}
-                            onKeyDown={e => e.key === ' ' && set('isDefault', !form.isDefault)}
-                        >
-                            <span className={styles.toggleThumb} />
-                        </div>
-                        <div className={styles.toggleLabel}>
-                            <span className={styles.toggleTitle}>Set as default address</span>
-                            <span className={styles.toggleSub}>Used automatically at checkout</span>
-                        </div>
+                    <label className={styles.checkRow}>
+                        <input type="checkbox" className={styles.checkbox}
+                            checked={form.isDefault} onChange={e => set('isDefault', e.target.checked)} />
+                        <span className={styles.checkText}>
+                            <span className={styles.checkTitle}>Set as default address</span>
+                            <span className={styles.checkSub}>Used automatically at checkout</span>
+                        </span>
                     </label>
                 </div>
 
-                {/* ── Footer Actions ── */}
+                {/* Footer */}
                 <div className={styles.panelFooter}>
-                    <button className={styles.cancelBtn} onClick={onClose}>Cancel</button>
-                    <button
-                        className={`${styles.saveBtn} ${saving ? styles.saveBtnLoading : ''}`}
-                        onClick={handleSave}
-                        disabled={saving}
-                    >
-                        {saving ? (
-                            <span className={styles.spinner} />
-                        ) : (
-                            <>
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                    <path d="M2 8l4.5 4.5L14 3.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                                Save Address
-                            </>
-                        )}
+                    <button className={styles.cancelBtn} onClick={onClose} type="button">Cancel</button>
+                    <button className={styles.saveBtn} onClick={handleSave} disabled={saving} type="button">
+                        {saving ? <span className={styles.spinner} aria-label="Saving" /> : (isEditing ? 'Save changes' : 'Save address')}
                     </button>
                 </div>
             </aside>

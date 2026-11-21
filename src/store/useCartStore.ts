@@ -1,69 +1,133 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import { CartItem, ProductSchema } from "@/types/database";
+import { fetchUserCart, saveUserCart } from "@/lib/cartService";
 
 interface CartStore {
   items: CartItem[];
-  addItem: (product: ProductSchema) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  userId: string | null;
+  isInitialized: boolean;
+
+  // Actions
+  initializeCart: (userId: string | null) => Promise<void>;
+  addItem: (
+    product:
+      | ProductSchema
+      | {
+          product_id: string;
+          product_name: string;
+          discounted_price: string | number;
+          actual_price: string | number;
+          img_link: string;
+        },
+  ) => void;
+  removeItem: (productId: string) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
   total: () => number;
 }
 
-export const useCartStore = create<CartStore>()(
-  persist(
-    (set, get) => ({
-      items: [],
+export const parsePrice = (
+  value: string | number | null | undefined,
+): number => {
+  const cleaned = String(value ?? "").replace(/[^0-9.]/g, "");
+  const parsed = cleaned ? Number(cleaned) : 0;
+  return Number.isNaN(parsed) ? 0 : parsed;
+};
 
-      addItem: (product) => {
-        const items = get().items;
-        // ✅ use product_id, not product.id
-        const existingItem = items.find(
-          (item) => item.id === product.product_id,
-        );
+export const useCartStore = create<CartStore>()((set, get) => ({
+  items: [],
+  userId: null,
+  isInitialized: false,
 
-        if (existingItem) {
-          set({
-            items: items.map((item) =>
-              item.id === product.product_id
-                ? { ...item, quantity: item.quantity + 1 }
-                : item,
-            ),
-          });
-        } else {
-          const newItem: CartItem = {
-            id: product.product_id, // ✅ was product.id
-            name: product.product_name,
-            price: Number(String(product.price).replace(/[^0-9.]/g, "")),
-            quantity: 1,
-          };
-          set({ items: [...items, newItem] });
-        }
-      },
+  // Call this when the user logs in or when the app mounts with an active auth state
+  initializeCart: async (userId) => {
+    if (!userId) {
+      set({ items: [], userId: null, isInitialized: true });
+      return;
+    }
 
-      removeItem: (id) =>
-        set({ items: get().items.filter((item) => item.id !== id) }),
+    // If already initialized for this user, don't re-fetch unnecessarily
+    if (get().userId === userId && get().isInitialized) return;
 
-      updateQuantity: (id, quantity) => {
-        if (quantity <= 0) {
-          get().removeItem(id);
-          return;
-        }
-        set({
-          items: get().items.map((item) =>
-            item.id === id ? { ...item, quantity } : item,
-          ),
-        });
-      },
+    const remoteItems = await fetchUserCart(userId);
+    set({ items: remoteItems, userId, isInitialized: true });
+  },
 
-      clearCart: () => set({ items: [] }),
+  addItem: (product) => {
+    const { items, userId } = get();
+    const existingItem = items.find(
+      (item) => item.product_id === product.product_id,
+    );
 
-      total: () =>
-        get().items.reduce((sum, item) => sum + item.price * item.quantity, 0),
-    }),
-    {
-      name: "cart-storage", // Key for localStorage
-    },
-  ),
-);
+    let updatedItems: CartItem[];
+
+    if (existingItem) {
+      updatedItems = items.map((item) =>
+        item.product_id === product.product_id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item,
+      );
+    } else {
+      const newItem: CartItem = {
+        product_id: product.product_id,
+        product_name: product.product_name,
+        // Ensures prices are stored cleanly as strings/matching CartItem types
+        discounted_price: String(product.discounted_price),
+        actual_price: String(product.actual_price),
+        quantity: 1,
+        img_link: product.img_link,
+      };
+      updatedItems = [...items, newItem];
+    }
+
+    set({ items: updatedItems });
+
+    // Sync to Firestore if user is logged in
+    if (userId) {
+      saveUserCart(userId, updatedItems);
+    }
+  },
+
+  removeItem: (productId) => {
+    const { items, userId } = get();
+    const updatedItems = items.filter((item) => item.product_id !== productId);
+
+    set({ items: updatedItems });
+
+    if (userId) {
+      saveUserCart(userId, updatedItems);
+    }
+  },
+
+  updateQuantity: (productId, quantity) => {
+    const { items, userId } = get();
+    if (quantity <= 0) {
+      get().removeItem(productId);
+      return;
+    }
+
+    const updatedItems = items.map((item) =>
+      item.product_id === productId ? { ...item, quantity } : item,
+    );
+
+    set({ items: updatedItems });
+
+    if (userId) {
+      saveUserCart(userId, updatedItems);
+    }
+  },
+
+  clearCart: () => {
+    const { userId } = get();
+    set({ items: [] });
+    if (userId) {
+      saveUserCart(userId, []);
+    }
+  },
+
+  total: () =>
+    get().items.reduce(
+      (sum, item) => sum + parsePrice(item.discounted_price) * item.quantity,
+      0,
+    ),
+}));

@@ -2,21 +2,28 @@ export interface ProductSchema {
   id: string;
   product_id: string;
   product_name: string;
-  mrp: string;
-  price : string;
   category: string;
-  brand: string;
-  margin_percentage: string;
-  max_stock_level: string;
-  min_stock_level: string;
-  shelf_life_days: string
+  discounted_price: string;
+  actual_price: string;
+  discount_percentage: string;
+  rating: string;
+  rating_count: string;
+  about_product: string;
+  img_link: string;
+  product_link: string;
+  user_id: string;
+  user_name: string;
+  review_id: string;
+  review_title: string;
+  review_content: string;
 }
 interface CartItem {
-  id: string;
-  name: string;
-  price: number;
+  product_id: string;
+  product_name: string;
+  discounted_price: string;
+  actual_price: string;
   quantity: number;
-  image?: string;
+  img_link?: string;
 }
 interface CartSidebarProps {
   isOpen: boolean;

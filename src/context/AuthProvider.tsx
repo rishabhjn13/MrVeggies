@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, ReactNode } from "react";
 import { User } from "@/store/useAuthStore";
 import { initializeAuth, useAuthStore } from "@/store/useAuthStore";
+import { initAddressSync } from "@/store/useAddressStore";
 import LoadingSpinner from "@/app/components/LoadingSpinner";
 
 type AuthContextType = {
@@ -23,17 +24,21 @@ export const useAuth = () => {
 export function AuthProvider({ children }: { children: ReactNode }) {
     const user = useAuthStore((state) => state.user);
     const loading = useAuthStore((state) => state.loading);
-    
+
     useEffect(() => {
-        const unsubscribe = initializeAuth();
-        return () => unsubscribe();
+        const unsubscribeAuth = initializeAuth();
+        const unsubscribeAddresses = initAddressSync();
+
+        return () => {
+            unsubscribeAuth();
+            unsubscribeAddresses();
+        };
     }, []);
 
     const value: AuthContextType = {
         user,
         loading,
     };
-
 
     return (
         <AuthContext.Provider value={value}>

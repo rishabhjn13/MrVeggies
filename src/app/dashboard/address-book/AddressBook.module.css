@@ -191,7 +191,8 @@
 .addressCard h3,
 .phone,
 .fullAddress,
-.actions {
+.actions,
+.confirmRow {
     grid-column: 2;
 }
 
@@ -274,8 +275,11 @@
 }
 
 /* --- Actions Row ------------------------------------------ */
-.actions {
+.actions,
+.confirmRow {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 10px;
     padding: 18px 26px 22px;
     margin-top: 18px;
@@ -283,7 +287,8 @@
 }
 
 .editBtn,
-.deleteBtn {
+.deleteBtn,
+.makeDefaultBtn {
     padding: 9px 22px;
     border-radius: var(--radius-pill);
     font-size: 13px;
@@ -316,6 +321,34 @@
     background: color-mix(in srgb, var(--c-error) 10%, transparent);
     border-color: var(--c-error);
     transform: translateY(-1px);
+}
+
+.makeDefaultBtn {
+    background: transparent;
+    color: var(--c-muted);
+    border-color: var(--c-border);
+}
+
+.makeDefaultBtn:hover {
+    color: var(--c-brand);
+    border-color: var(--c-brand);
+    background: color-mix(in srgb, var(--c-brand) 8%, transparent);
+    transform: translateY(-1px);
+}
+
+.confirmText {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--c-text);
+    margin-right: 4px;
+}
+
+.editBtn:focus-visible,
+.deleteBtn:focus-visible,
+.makeDefaultBtn:focus-visible,
+.addBtn:focus-visible {
+    outline: 2px solid var(--c-brand);
+    outline-offset: 2px;
 }
 
 /* --- Empty State (optional, future-proof) ----------------- */

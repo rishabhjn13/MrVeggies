@@ -1,42 +1,11 @@
-'use client';
+import type { Metadata } from 'next';
+import HomeClient from './HomeClient';
 
-import React from "react";
-
-import "../styles/animations.css";
-import "../styles/components.css";
-import "./globals.css";
-
-import AppBanner from "./components/AppBanner";
-import CategoryStrip from "./components/Category";
-import DealsSection from "./components/DealsSection";
-import FloatingCartButton from "./components/FloatingCartButton";
-import Footer from "./components/Footer";
-import Hero from "./components/Hero";
-import HowItWorks from "./components/HowItWorks";
-import Navbar from "./components/Navbar";
-import { useCart } from "@/context/CartContext";
-
-const App: React.FC = () => {
-  const { openCart } = useCart();
-  return (
-    <>
-      <Navbar />
-
-      <main>
-        <FloatingCartButton
-          itemCount={useCart().getTotalItems()}
-          onClick={openCart}
-        />
-        <Hero />
-        <CategoryStrip />
-        <DealsSection />
-        <HowItWorks />
-        <AppBanner />
-      </main>
-
-      <Footer />
-    </>
-  );
+export const metadata: Metadata = {
+  title: 'MrVeggies - Fresh Groceries & Quick Commerce',
+  description: 'Browse fresh vegetables, fruits, and daily products delivered in minutes.',
 };
 
-export default App;
+export default function Page() {
+  return <HomeClient />;
+}
